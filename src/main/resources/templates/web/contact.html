@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title layout:fragment="pageTitle">Liên hệ | SkyLand</title>
+</head>
+
+<body>
+<main layout:fragment="content" class="page-wrapper">
+
+    <!-- INTRO -->
+    <section class="intro text-center text-white"
+             style="background-image: url('https://bizweb.dktcdn.net/100/328/362/themes/894751/assets/bg_breadcrumb.png?1664350964800');
+                    background-size: cover; background-position: center; padding: 60px 0;">
+        <h1 class="fw-bold display-5">Liên hệ</h1>
+        <ul class="list-inline mt-3 mb-0">
+            <li class="list-inline-item">
+                <a th:href="@{/trang-chu}" class="text-white text-decoration-none">Trang chủ</a>
+                <span class="mx-1">/</span>
+            </li>
+            <li class="list-inline-item text-white">Liên hệ</li>
+        </ul>
+    </section>
+
+    <!-- THÔNG TIN VÀ FORM LIÊN HỆ -->
+    <section class="contact py-5">
+        <div class="container">
+            <div class="row g-5">
+
+                <!-- THÔNG TIN CÔNG TY -->
+                <div class="col-md-6">
+                    <h3 class="fw-bold mb-3 text-success">Công ty Cổ phần Bất động sản SkyLand</h3>
+                    <p>
+                        Được thành lập ngày <b>20/08/2008</b> với khát vọng dẫn đầu trong lĩnh vực bất động sản.
+                        Nhờ chiến lược rõ ràng và tầm nhìn dài hạn, SkyLand đã phát triển mạnh mẽ, khẳng định uy tín
+                        trên toàn quốc.
+                    </p>
+
+                    <ul class="list-unstyled mt-3 text-muted">
+                        <li class="mb-2">
+                            <i class="fa-solid fa-location-dot text-success me-2"></i>
+                            <span>46 Man Thiện, TP. Thủ Đức, TP. Hồ Chí Minh</span>
+                        </li>
+                        <li class="mb-2">
+                            <i class="fa-solid fa-phone text-success me-2"></i>
+                            Hotline: <a href="tel:0922227" class="text-dark text-decoration-none">0922227</a>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-envelope text-success me-2"></i>
+                            Email: <a href="mailto:vsh@gmail.com" class="text-dark text-decoration-none">vsh@gmail.com</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- FORM LIÊN HỆ -->
+                <div class="col-md-6">
+                    <div class="border rounded-3 p-4 shadow-sm">
+                        <h4 class="fw-bold mb-3 text-success">Liên hệ với chúng tôi</h4>
+
+                        <form id="contactForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" id="name" placeholder="Họ và tên" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="email" class="form-control" id="email" placeholder="Email" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" id="phone" placeholder="Số điện thoại" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" id="demand" placeholder="Nhu cầu">
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-success w-100 mt-2">Gửi liên hệ</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- GOOGLE MAP -->
+    <section class="map border-top">
+        <div class="container py-4">
+            <iframe style="width: 100%; height: 450px; border: 0;"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.577731862711!2d106.7695372142139!3d10.850261760047032!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f8d0e993b05%3A0x8abf4c480f8b822b!2zOTcgTWFuIFRoacOqbiwgUGjDuiBIaeG7h3AgSMaw4budYywgbmjhuq10IHPDumMgVHJ1w6JuIFbEg25nLCBWaeG7h3QgTmFt!5e0!3m2!1sen!2s!4v1652520257601!5m2!1sen!2s"
+                    loading="lazy" allowfullscreen></iframe>
+        </div>
+    </section>
+
+</main>
+
+<!-- SCRIPT GỬI FORM -->
+<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js}"></script>
+<script th:inline="javascript">
+    $(function () {
+        $('#contactForm').on('submit', function (e) {
+            e.preventDefault();
+
+            const data = {
+                fullname: $('#name').val().trim(),
+                email: $('#email').val().trim(),
+                phone: $('#phone').val().trim(),
+                demand: $('#demand').val().trim(),
+                status: 'Chưa xử lý'
+            };
+
+            if (!data.fullname || !data.email || !data.phone) {
+                alert('Vui lòng nhập đầy đủ họ tên, email và số điện thoại!');
+                return;
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: /*[[@{/api/customer}]]*/ '/api/customer',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                success: function () {
+                    alert('✅ Gửi thông tin thành công!');
+                    $('#contactForm')[0].reset();
+                },
+                error: function () {
+                    alert('❌ Gửi thông tin thất bại, vui lòng thử lại!');
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

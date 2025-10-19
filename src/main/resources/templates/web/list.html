@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title layout:fragment="pageTitle">Sản phẩm | SkyLand</title>
+</head>
+
+<body>
+<main layout:fragment="content" class="page-wrapper">
+
+    <!-- INTRO -->
+    <section class="intro text-center text-white" style="
+        background-image: url('https://bizweb.dktcdn.net/100/328/362/themes/894751/assets/bg_breadcrumb.png?1664350964800');
+        background-size: cover; background-position: center; padding: 60px 0;">
+        <h1 class="fw-bold display-5">Tất cả dự án</h1>
+        <ul class="list-inline mt-3 mb-0">
+            <li class="list-inline-item">
+                <a th:href="@{/trang-chu}" class="text-white text-decoration-none">Trang chủ</a>
+                <span class="mx-1">/</span>
+            </li>
+            <li class="list-inline-item"><span class="text-light">Tất cả sản phẩm</span></li>
+        </ul>
+    </section>
+
+    <!-- FORM TÌM KIẾM -->
+    <section class="search py-5 bg-light border-bottom">
+        <div class="container">
+            <form th:action="@{/san-pham}" method="get" class="row g-3">
+                <div class="col-md-3">
+                    <label class="fw-bold mb-1">Tỉnh/Thành phố</label>
+                    <select class="form-select" name="city" th:value="${search.city}">
+                        <option value="">-- Chọn tỉnh/thành phố --</option>
+                        <option>TP. Hồ Chí Minh</option>
+                        <option>TP. Hà Nội</option>
+                        <option>TP. Đà Nẵng</option>
+                        <option>TP. Cần Thơ</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw-bold mb-1">Quận/Huyện</label>
+                    <select class="form-select" name="district" th:value="${search.district}">
+                        <option value="">-- Chọn quận/huyện --</option>
+                        <option>Quận 1</option>
+                        <option>Quận 2</option>
+                        <option>Quận 3</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="fw-bold mb-1">Loại BĐS</label>
+                    <select class="form-select" name="type" th:value="${search.type}">
+                        <option value="">-- Chọn loại --</option>
+                        <option>Căn hộ</option>
+                        <option>Nhà phố</option>
+                        <option>Biệt thự</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="fa-solid fa-magnifying-glass me-1"></i> Tìm kiếm nhanh
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- DANH SÁCH SẢN PHẨM -->
+    <section class="product py-5">
+        <div class="container">
+            <div class="row g-4" th:if="${!#lists.isEmpty(projects)}">
+                <div class="col-md-4" th:each="project : ${projects}">
+                    <div class="card border-0 shadow-sm h-100">
+                        <a th:href="@{'/chi-tiet/' + ${project.id}}">
+                            <div class="card-img-top rounded-top"
+                                 th:style="'background-image:url(' + ${project.imageUrl} + '); background-size:cover; height:220px;'">
+                            </div>
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title mb-2">
+                                <a th:href="@{'/chi-tiet/' + ${project.id}}"
+                                   th:text="${project.title}"
+                                   class="text-decoration-none text-dark fw-bold">
+                                </a>
+                            </h5>
+                            <p class="text-muted small" th:text="${project.description}">
+                                Mô tả ngắn của dự án bất động sản...
+                            </p>
+                            <ul class="list-unstyled small text-muted mb-0">
+                                <li><i class="fa-solid fa-location-dot me-1 text-success"></i>
+                                    <span th:text="${project.address}">Số 03 Tôn Thất Thuyết</span>
+                                </li>
+                                <li><i class="fa-solid fa-building me-1 text-success"></i>
+                                    Loại: <span th:text="${project.type}">Chung cư</span>
+                                </li>
+                                <li><i class="fa-solid fa-ruler-combined me-1 text-success"></i>
+                                    Diện tích: <span th:text="${project.area}">78 - 146 m²</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center pt-0">
+                            <span class="fw-bold text-success" th:text="${project.price}">2,5 Tỷ</span>
+                            <a class="btn btn-outline-primary btn-sm" th:href="@{'/chi-tiet/' + ${project.id}}">Chi tiết</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nếu không có dữ liệu -->
+            <div th:if="${#lists.isEmpty(projects)}" class="text-center mt-5 text-muted">
+                <i class="fa-solid fa-box-open fa-2x mb-3"></i>
+                <p>Hiện chưa có dự án nào được đăng.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PHÂN TRANG -->
+    <nav th:if="${totalPages > 1}" class="container text-center my-4">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${page == 1} ? 'disabled'">
+                <a class="page-link" th:href="@{|/san-pham?page=${page - 1}|}">«</a>
+            </li>
+            <li class="page-item"
+                th:each="i : ${#numbers.sequence(1, totalPages)}"
+                th:classappend="${i == page} ? 'active'">
+                <a class="page-link" th:href="@{|/san-pham?page=${i}|}" th:text="${i}"></a>
+            </li>
+            <li class="page-item" th:classappend="${page == totalPages} ? 'disabled'">
+                <a class="page-link" th:href="@{|/san-pham?page=${page + 1}|}">»</a>
+            </li>
+        </ul>
+    </nav>
+
+</main>
+</body>
+</html>

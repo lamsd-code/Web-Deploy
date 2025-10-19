@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Trang Chủ User</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h2>Chào mừng <span th:text="${#httpServletRequest.session.getAttribute('currentUser')?.fullname}"></span></h2>
+    <p>Đây là trang chủ dành cho User.</p>
+</div>
+</body>
+</html>

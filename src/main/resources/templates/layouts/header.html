@@ -1,0 +1,47 @@
+<div th:fragment="header">
+    <header class="bg-light shadow-sm mb-4">
+        <nav class="navbar navbar-expand-lg navbar-light container">
+            <a class="navbar-brand fw-bold text-success" th:href="@{/trang-chu}">
+                <i class="fa-solid fa-building"></i> SkyLand
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/trang-chu}">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/gioi-thieu}">Giới thiệu</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/san-pham}">Dự án</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/tin-tuc}">Tin tức</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/lien-he}">Liên hệ</a></li>
+
+                    <!-- Người chưa đăng nhập -->
+                    <li class="nav-item" th:if="${session.currentUser == null}">
+                        <a class="nav-link text-success" th:href="@{/login}">Đăng nhập</a>
+                    </li>
+                    <li class="nav-item" th:if="${session.currentUser == null}">
+                        <a class="nav-link text-success" th:href="@{/register}">Đăng ký</a>
+                    </li>
+
+                    <!-- Quản trị -->
+                    <li class="nav-item" th:if="${session.currentUser?.isAdmin}">
+                        <a class="nav-link text-danger fw-bold" th:href="@{/admin}">Quản trị</a>
+                    </li>
+
+                    <!-- Người đã đăng nhập -->
+                    <li class="nav-item dropdown" th:if="${session.currentUser != null}">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarUser" role="button" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-user"></i>
+                            <span th:text="${session.currentUser.fullName}">Người dùng</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUser">
+                            <li><a class="dropdown-item" th:href="@{/profile}">Hồ sơ</a></li>
+                            <li><a class="dropdown-item text-danger" th:href="@{/logout}">Đăng xuất</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+</div>

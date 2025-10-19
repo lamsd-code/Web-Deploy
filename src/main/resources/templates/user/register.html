@@ -1,0 +1,35 @@
+<div xmlns:th="http://www.thymeleaf.org"
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+     layout:decorate="~{layouts/layout}">
+
+    <div layout:fragment="content">
+        <h2>Đăng ký</h2>
+
+        <!-- Hiển thị lỗi nếu có -->
+        <div th:if="${error}" style="color:red" th:text="${error}"></div>
+
+        <form th:action="@{/register}" th:object="${user}" method="post">
+            <div>
+                <label>Email:</label>
+                <input type="email" th:field="*{email}" required/>
+            </div>
+            <div>
+                <label>Họ tên:</label>
+                <input type="text" th:field="*{fullname}" required/>
+            </div>
+            <div>
+                <label>Số điện thoại:</label>
+                <input type="number" th:field="*{phone}"/>
+            </div>
+            <div>
+                <label>Mật khẩu:</label>
+                <input type="password" th:field="*{password}" required/>
+            </div>
+            <div>
+                <button type="submit">Đăng ký</button>
+            </div>
+        </form>
+
+        <p>Đã có tài khoản? <a th:href="@{/login}">Đăng nhập</a></p>
+    </div>
+</div>
